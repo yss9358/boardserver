@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="UserDtoMapper">
+
+
+    <select id="getUserProfile" resultType="UserDto">
+        /* userMapper.getUserProfile 유저정보 가져오기 */
+        SELECT  id,
+                userId,
+                password,
+                nickName,
+                createTime,
+                updateTime,
+                isWithDraw,
+                status
+        FROM    USER
+        WHERE USERID = #{id}
+    </select>
+
+    <insert id="insertUserProfile" parameterType="UserDto">
+        /* userMapper.insertUserProfile 유저 정보 등록하기 */
+        INSERT INTO USER
+        (
+            userId,
+            password,
+            nickName,
+            isWithDraw,
+            status,
+            isAdmin
+        ) VALUES
+        (
+            #{userId},
+            #{password},
+            #{nickName},
+            #{isWithDraw},
+            #{status},
+            #{isAdmin}
+        )
+    </insert>
+
+    <update id="updateUserProfile" parameterType="UserDto">
+        /* userMapper.updateUserProfile 유저 정보 수정하기 */
+        UPDATE USER
+        SET password = #{password},
+            nickName = #{nickName},
+            isWithDraw = #{isWithDraw},
+            status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteUserProfile" parameterType="UserDto">
+        /* userMapper.deleteUserProfile 유저 정보 삭제하기 */
+        DELETE FROM USER
+        WHERE userId = #{userId}
+    </delete>
+
+    <select id="findByIdAndPassword" parameterType="UserDto" resultType="UserDto">
+        /* userMapper.findByIdAndPassword 유저 정보 조회(로그인) */
+        SELECT  id,
+                userId,
+                password,
+                nickName,
+                createTime,
+                isWithDraw,
+                status
+        FROM    USER
+        WHERE   userId = #{id}
+        AND     password = #{password}
+        AND     status != 'DELETE'
+    </select>
+
+    <select id="idCheck" resultType="int">
+        /* userMapper.idCheck 아이디 중복체크 */
+        SELECT  COUNT(id)
+        FROM    USER
+        WHERE   userId = #{userId}
+    </select>
+
+    <update id="updatePassword" parameterType="UserDto">
+        /* userMapper.updatePassword 유저 비밀번호 변경 */
+        UPDATE  USER
+        SET     password = #{password}
+        WHERE   userId = #{userId}
+    </update>
+
+
+
+
+</mapper>
